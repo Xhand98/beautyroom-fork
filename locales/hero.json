@@ -1,0 +1,29 @@
+{
+  "main": {
+    "src": "/public/home/images/elegant-woman-beauty-salon-treatment.jpg",
+    "alt": "Estilista aplicando tratamiento capilar",
+    "credit": "Unsplash"
+  },
+  "card": {
+    "src": "/public/home/images/beauty-salon-customer-woman.jpg",
+    "alt": "Clientes sonrientes en salón",
+    "credit": "Unsplash"
+  },
+  "gallery": [
+    {
+      "src": "/public/home/images/happy-customer-woman-portrait.jpg",
+      "alt": "Retrato de clienta feliz",
+      "credit": "Unsplash"
+    },
+    {
+      "src": "/public/home/images/satisfied-client-woman-face.jpg",
+      "alt": "Detalle de manos y manicura",
+      "credit": "Unsplash"
+    },
+    {
+      "src": "/public/home/images/beauty-salon-customer-woman.jpg",
+      "alt": "Interior elegante de salón",
+      "credit": "Unsplash"
+    }
+  ]
+}

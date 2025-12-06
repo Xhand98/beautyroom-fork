@@ -1,9 +1,11 @@
+import { HeroSection } from "@/components/home/hero";
+import { CtaSection } from "@/components/home/ctaSection"
 
 export default function Home() {
   return (
     <div className="bg-[#FAF8F5] min-h-screen">
-      <main className="min-h-screen flex items-center justify-center">
-      </main>
+      <HeroSection />
+      <CtaSection/>
     </div>
   );
 }

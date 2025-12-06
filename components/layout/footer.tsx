@@ -82,12 +82,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/productos"
-                  className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:translate-x-1 inline-block"
-                >
-                  Productos
-                </Link>
               </li>
             </ul>
           </div>

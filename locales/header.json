@@ -2,8 +2,7 @@
   "nav": [
     { "label": "Inicio", "href": "/" },
     { "label": "Servicios", "href": "/servicios" },
-    { "label": "Estilistas", "href": "/estilistas" },
     { "label": "Citas", "href": "/citas" },
-    { "label": "Productos", "href": "/productos" }
-  ]
+    { "label": "Acerca de", "href": "/acerca-de" }
+  ] 
 }

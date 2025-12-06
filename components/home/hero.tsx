@@ -1,0 +1,88 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Calendar, Sparkles } from "lucide-react"
+import locales from "@/locales/hero.json"
+
+export function HeroSection() {
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-secondary/40 via-background to-accent/20 py-20 lg:py-32">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-20 left-10 h-72 w-72 rounded-full bg-primary/5 blur-3xl animate-float" />
+        <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full bg-accent/10 blur-3xl animate-float animation-delay-200" />
+      </div>
+
+      <div className="container mx-auto px-4">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm text-primary animate-fade-in">
+              <Sparkles className="h-4 w-4" />
+              <span>Tu belleza, nuestra pasión</span>
+            </div>
+
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl text-balance animate-fade-in-up animation-delay-100">
+              Transforma tu <span className="text-primary">belleza</span> con nosotros
+            </h1>
+
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl animate-fade-in-up animation-delay-200">
+              En BeautyRoom te ofrecemos una experiencia única de cuidado personal. Nuestro equipo de estilistas
+              expertos está listo para realzar tu belleza natural.
+            </p>
+
+            <div className="flex flex-wrap gap-4 animate-fade-in-up animation-delay-300">
+              <Link href="/citas">
+                <Button size="lg" className="gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg text-white">
+                  <Calendar className="h-5 w-5" />
+                  Agendar Cita
+                </Button>
+              </Link>
+              <Link href="/servicios">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="transition-all duration-300 hover:scale-105 bg-transparent"
+                >
+                  Ver Servicios
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative hidden lg:block animate-slide-in-right">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl">
+               <img
+                src={locales.main.src.replace(/^\/public/, "")}
+                alt={locales.main.alt}
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
+            <div className="absolute -bottom-6 -left-6 rounded-xl bg-card p-4 shadow-xl animate-scale-in animation-delay-400">
+              <div className="flex items-center gap-3">
+                <div className="flex -space-x-2">
+                  <img
+                     src={locales.gallery[0].src.replace(/^\/public/, "")}
+                      alt={locales.gallery[0].alt}
+                    className="h-10 w-10 rounded-full border-2 border-background object-cover"
+                  />
+                  <img
+                    src={locales.gallery[1].src.replace(/^\/public/, "")}
+                    alt={locales.gallery[1].alt}
+                    className="h-10 w-10 rounded-full border-2 border-background object-cover"
+                  />
+                  <img
+                    src={locales.gallery[2].src.replace(/^\/public/, "")}
+                    alt={locales.main.alt}
+                    className="h-10 w-10 rounded-full border-2 border-background object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">+2,500 clientes</p>
+                  <p className="text-xs text-muted-foreground">satisfechos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
