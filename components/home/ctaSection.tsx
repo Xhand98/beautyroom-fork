@@ -1,42 +1,33 @@
-import { Users, Calendar, Award, Heart } from "lucide-react"
-
-const stats = [
-  {
-    icon: Users,
-    value: "2,500+",
-    label: "Clientes Satisfechos",
-  },
-  {
-    icon: Calendar,
-    value: "10,000+",
-    label: "Citas Realizadas",
-  },
-  {
-    icon: Award,
-    value: "15",
-    label: "Años de Experiencia",
-  },
-  {
-    icon: Heart,
-    value: "98%",
-    label: "Tasa de Satisfacción",
-  },
-]
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Calendar, Phone } from "lucide-react"
 
 export function CtaSection() {
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <stat.icon className="h-8 w-8 text-primary" />
-              </div>
-              <div className="text-3xl font-bold">{stat.value}</div>
-              <div className="mt-1 text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
+    <section className="bg-[#9E6034] py-20 text-white">
+      <div className="container mx-auto px-4 text-center">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">¿Lista para transformar tu look?</h2>
+        <p className="mx-auto mt-4 max-w-xl text-lg opacity-90">
+          Agenda tu cita hoy y déjate consentir por nuestros expertos. Primera cita con 20% de descuento.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link href="/citas">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
+              <Calendar className="h-5 w-5" />
+              Agendar Ahora
+            </Button>
+          </Link>
+          <Button
+            size="lg"
+            className="gap-2 bg-transparent border border-white text-white transition-all duration-200 hover:bg-white hover:text-[#9E6034] hover:scale-105 hover:shadow-lg"
+          >
+            <Phone className="h-5 w-5" />
+            Llamar: 555 123 4567
+          </Button>
         </div>
       </div>
     </section>

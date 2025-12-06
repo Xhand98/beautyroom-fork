@@ -107,8 +107,7 @@ export default function ServiciosPage() {
             Nuestros Servicios
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Descubre algunos de los servicios que tenemos para realzar tu
-            belleza natural
+          Descubre todos los servicios que tenemos para realzar tu belleza natural
           </p>
         </div>
 
@@ -234,8 +233,8 @@ export default function ServiciosPage() {
                   </div>
 
                    <Link href={`/citas?servicio=${service.id}`}>
-                    <Button className="w-full mt-4 gap-2 text-primary">
-                      <Calendar className="h-4 w-4 bg-primary" />
+                    <Button className="w-full mt-4 gap-2 text-white ">
+                      <Calendar className="h-4 w-4 " />
                       Agendar Cita
                     </Button>
                   </Link>

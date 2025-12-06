@@ -15,10 +15,10 @@ import {
 
 export default function Header() {
   return (
-    <header className="sticky top-0 left-0 w-full z-50" >
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 transition-all duration-300" >
       <nav
         aria-label="Main navigation"
-        className="flex z-40 w-full h-auto items-center justify-center data-[menu-open=true]:border-none sticky top-0 inset-x-0 border-b border-divider backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-primary-100/503"
+        className="text-lg text-muted-foreground transition-all duration-200 hover:text-foreground hover:translate-x-1"
       >
         <div className="max-w-6xl mx-auto grid grid-cols-3 items-center p-5">
           <div className="flex items-center gap-3">
