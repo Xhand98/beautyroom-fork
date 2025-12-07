@@ -2,13 +2,32 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Scissors, Eye, EyeOff } from "lucide-react";
 
+function saveAuthToStorage(payload: any) {
+  const token =
+    payload?.token ||
+    payload?.access_token ||
+    payload?.accessToken ||
+    payload?.data?.token ||
+    payload?.token?.plainTextToken;
+  const user = payload?.user || payload?.data?.user || payload?.data || null;
+
+  const authObj = { token, user, raw: payload };
+  try {
+    localStorage.setItem("beautyroom_auth", JSON.stringify(authObj));
+  } catch {
+    // ignore
+  }
+}
+
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +51,6 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      // Intenta parsear JSON si lo devuelve
       let payload: any = null;
       try {
         payload = await res.json();
@@ -41,19 +59,27 @@ export default function LoginPage() {
       }
 
       if (res.ok) {
-        // éxito
         const msg = payload?.message || "Inicio de sesión exitoso";
         setSuccessMessage(msg);
         setErrorMessage(null);
-        // Aquí posteriormente harías el guardado del token / redirección
+
+        // guarda en localStorage (token + user si vienen)
+        saveAuthToStorage(payload);
+
+        // redirige a home y recarga para que el header se actualice
+        const nav = router.push("/");
+        if (nav && typeof (nav as Promise<any>).then === "function") {
+          (nav as Promise<any>).then(() => window.location.reload());
+        } else {
+          // fallback por si push no devuelve promesa
+          setTimeout(() => window.location.reload(), 200);
+        }
       } else {
-        // error del servidor (credenciales, etc)
         const err = payload?.message || `Error: ${res.status} ${res.statusText}`;
         setErrorMessage(err);
         setSuccessMessage(null);
       }
     } catch (err) {
-      // fallo de red
       setErrorMessage("No se pudo conectar al servidor. Verifica que el backend esté en ejecución.");
       setSuccessMessage(null);
       console.error("Login fetch error:", err);

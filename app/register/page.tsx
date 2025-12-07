@@ -2,13 +2,32 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Scissors } from "lucide-react";
 
+function saveAuthToStorage(payload: any) {
+  const token =
+    payload?.token ||
+    payload?.access_token ||
+    payload?.accessToken ||
+    payload?.data?.token ||
+    payload?.token?.plainTextToken;
+  const user = payload?.user || payload?.data?.user || payload?.data || null;
+
+  const authObj = { token, user, raw: payload };
+  try {
+    localStorage.setItem("beautyroom_auth", JSON.stringify(authObj));
+  } catch {
+    // ignore
+  }
+}
+
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,22 +60,22 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-    const res = await fetch("http://localhost:8000/api/auth/register", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    name: name,
-    email,
-    password,
-    password_confirmation: confirmPassword
-  }),
-});
+      const res = await fetch("http://localhost:8000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          email,
+          password,
+          password_confirmation: confirmPassword,
+        }),
+      });
 
       let payload: any = null;
       try {
         payload = await res.json();
       } catch {
-
+        // no JSON
       }
 
       if (res.ok) {
@@ -64,10 +83,22 @@ export default function RegisterPage() {
         setSuccessMessage(msg);
         setErrorMessage(null);
 
+        // guarda credenciales (si backend devuelve token/user)
+        saveAuthToStorage(payload);
+
+        // limpia campos
         setName("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+
+        // redirige a home y recarga para que el header se actualice
+        const nav = router.push("/");
+        if (nav && typeof (nav as Promise<any>).then === "function") {
+          (nav as Promise<any>).then(() => window.location.reload());
+        } else {
+          setTimeout(() => window.location.reload(), 200);
+        }
       } else {
         const err = payload?.message || `Error: ${res.status} ${res.statusText}`;
         setErrorMessage(err);
