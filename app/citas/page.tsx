@@ -63,6 +63,14 @@ interface Appointment {
       email: string
     }
   }
+  stylist?: {
+    id: number
+    user: {
+      id: number
+      name: string
+      email: string
+    }
+  }
   service?: Service
 }
 
@@ -536,7 +544,7 @@ export default function CitasPage() {
                           <div className="flex-1">
                             <h4 className="font-medium">{appointment.service?.nombre}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {user.role === "stylist" ? "Cliente" : "Estilista"}: {user.role === "stylist" ? appointment.client?.user?.name : "Tu cita"}
+                              {user.role === "stylist" ? "Cliente" : "Estilista"}: {user.role === "stylist" ? appointment.client?.user?.name : appointment.stylist?.user?.name}
                             </p>
                             <p className="text-sm text-muted-foreground">
                               {appointment.fecha} a las {appointment.hora}
