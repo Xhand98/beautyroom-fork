@@ -55,7 +55,7 @@ export default function LoginPage() {
       try {
         payload = await res.json();
       } catch {
-        // no JSON
+
       }
 
       if (res.ok) {
@@ -63,15 +63,13 @@ export default function LoginPage() {
         setSuccessMessage(msg);
         setErrorMessage(null);
 
-        // guarda en localStorage (token + user si vienen)
         saveAuthToStorage(payload);
 
-        // redirige a home y recarga para que el header se actualice
         const nav = router.push("/");
         if (nav && typeof (nav as Promise<any>).then === "function") {
           (nav as Promise<any>).then(() => window.location.reload());
         } else {
-          // fallback por si push no devuelve promesa
+
           setTimeout(() => window.location.reload(), 200);
         }
       } else {
@@ -123,6 +121,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
+                  className="placeholder:text-gray"
                 />
               </div>
 
@@ -137,6 +136,8 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
+                    className="placeholder:text-gray"
+
                   />
                   <Button
                     type="button"

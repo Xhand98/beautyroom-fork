@@ -507,7 +507,7 @@ export default function CitasPage() {
                 )}
 
                 <Button
-                  className="w-full"
+                  className="w-full text-white"
                   size="lg"
                   onClick={handleBookAppointment}
                   disabled={!user || isBooking || !selectedService || !selectedStylist || !selectedDate || !selectedTime}

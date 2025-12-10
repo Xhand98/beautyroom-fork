@@ -66,8 +66,15 @@ export default function PerfilPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
+
+    // 🔥 FIX: eliminar error del campo sin usar undefined
+    setErrors((prev) => {
+      const cleaned = { ...prev };
+      delete cleaned[name];
+      return cleaned;
+    });
   };
 
   const validate = () => {
@@ -88,6 +95,7 @@ export default function PerfilPage() {
     e.preventDefault();
     setErrors({});
     const validation = validate();
+
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
       return;
@@ -95,7 +103,6 @@ export default function PerfilPage() {
 
     setIsSaving(true);
     try {
-      // Prepara los datos a enviar según el rol
       const dataToSend: Record<string, any> = {
         name: formData.name,
         email: formData.email,
@@ -109,6 +116,7 @@ export default function PerfilPage() {
       }
 
       const ok = await updateUser(dataToSend);
+
       if (ok) {
         toast.success("Perfil actualizado correctamente");
       } else {
@@ -197,7 +205,6 @@ export default function PerfilPage() {
         </div>
 
         <div className="space-y-6">
-          {/* Header del perfil */}
           <Card className="animate-fade-in">
             <CardHeader className="text-center pb-2">
               <div className="mx-auto w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
@@ -205,6 +212,7 @@ export default function PerfilPage() {
               </div>
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
+
               <div className="flex justify-center gap-2 mt-2">
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(
@@ -213,6 +221,7 @@ export default function PerfilPage() {
                 >
                   {getRoleName(user.role)}
                 </span>
+
                 {isStylist && (
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
@@ -226,7 +235,6 @@ export default function PerfilPage() {
             </CardHeader>
           </Card>
 
-          {/* Formulario de edición */}
           <Card className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <CardHeader>
               <CardTitle className="text-lg">Información Personal</CardTitle>
@@ -234,6 +242,7 @@ export default function PerfilPage() {
                 Actualiza tu información personal.
               </CardDescription>
             </CardHeader>
+
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Nombre */}
@@ -251,6 +260,7 @@ export default function PerfilPage() {
                     required
                     disabled={isSaving}
                   />
+
                   {errors.name && (
                     <p className="text-sm text-red-600 mt-1">{errors.name}</p>
                   )}
@@ -272,6 +282,7 @@ export default function PerfilPage() {
                     required
                     disabled={isSaving}
                   />
+
                   {errors.email && (
                     <p className="text-sm text-red-600 mt-1">{errors.email}</p>
                   )}
@@ -296,10 +307,7 @@ export default function PerfilPage() {
 
                 {/* Dirección */}
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="direccion"
-                    className="flex items-center gap-2"
-                  >
+                  <Label htmlFor="direccion" className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     Dirección
                   </Label>
@@ -313,7 +321,7 @@ export default function PerfilPage() {
                   />
                 </div>
 
-                {/* Campos solo para Stylist */}
+                {/* Solo Stylist */}
                 {isStylist && (
                   <>
                     <div className="space-y-2">
@@ -333,6 +341,7 @@ export default function PerfilPage() {
                         required
                         disabled={isSaving}
                       />
+
                       {errors.especialidad && (
                         <p className="text-sm text-red-600 mt-1">
                           {errors.especialidad}
@@ -348,6 +357,7 @@ export default function PerfilPage() {
                         <Shield className="h-4 w-4 text-muted-foreground" />
                         Estado
                       </Label>
+
                       <select
                         id="status"
                         name="status"
@@ -365,7 +375,7 @@ export default function PerfilPage() {
                   </>
                 )}
 
-                <Button type="submit" className="w-full" disabled={isSaving}>
+                <Button type="submit" className="w-full text-white" disabled={isSaving}>
                   {isSaving ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>

@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import React, { useState } from "react";
@@ -6,10 +8,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Scissors } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Scissors, Eye, EyeOff } from "lucide-react";
 
-function saveAuthToStorage(payload: any) {
+function saveAuthToStorage(payload) {
   const token =
     payload?.token ||
     payload?.access_token ||
@@ -21,9 +29,7 @@ function saveAuthToStorage(payload: any) {
   const authObj = { token, user, raw: payload };
   try {
     localStorage.setItem("beautyroom_auth", JSON.stringify(authObj));
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
 
 export default function RegisterPage() {
@@ -33,11 +39,14 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -64,49 +73,47 @@ export default function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name,
+          name,
           email,
           password,
           password_confirmation: confirmPassword,
         }),
       });
 
-      let payload: any = null;
+      let payload = null;
       try {
         payload = await res.json();
-      } catch {
-        // no JSON
-      }
+      } catch {}
 
       if (res.ok) {
         const msg = payload?.message || "Cuenta creada correctamente.";
         setSuccessMessage(msg);
         setErrorMessage(null);
 
-        // guarda credenciales (si backend devuelve token/user)
         saveAuthToStorage(payload);
 
-        // limpia campos
         setName("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
 
-        // redirige a home y recarga para que el header se actualice
         const nav = router.push("/");
-        if (nav && typeof (nav as Promise<any>).then === "function") {
-          (nav as Promise<any>).then(() => window.location.reload());
+        if (nav && typeof nav.then === "function") {
+          nav.then(() => window.location.reload());
         } else {
           setTimeout(() => window.location.reload(), 200);
         }
       } else {
-        const err = payload?.message || `Error: ${res.status} ${res.statusText}`;
+        const err =
+          payload?.message || `Error: ${res.status} ${res.statusText}`;
         setErrorMessage(err);
         setSuccessMessage(null);
       }
     } catch (err) {
       console.error("Register fetch error:", err);
-      setErrorMessage("No se pudo conectar al servidor. Verifica que el backend esté en ejecución.");
+      setErrorMessage(
+        "No se pudo conectar al servidor. Verifica que el backend esté en ejecución."
+      );
       setSuccessMessage(null);
     } finally {
       setIsLoading(false);
@@ -122,11 +129,17 @@ export default function RegisterPage() {
               <Scissors className="h-6 w-6 text-primary" />
             </div>
             <CardTitle className="text-2xl">Crear cuenta</CardTitle>
-            <CardDescription>Regístrate para agendar citas y más</CardDescription>
+            <CardDescription>
+              Regístrate para agendar citas y más
+            </CardDescription>
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4" aria-live="polite">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              aria-live="polite"
+            >
               {successMessage && (
                 <div className="rounded-md bg-green-100 border border-green-200 p-3 text-sm text-green-800">
                   {successMessage}
@@ -146,6 +159,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  className="placeholder:text-gray"
                 />
               </div>
 
@@ -159,49 +173,75 @@ export default function RegisterPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
+                  className="placeholder:text-gray"
+
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="register-password">Contraseña</Label>
-                <Input
-                  id="register-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
-                />
+                <div className="relative">
+                  <Input
+                    id="register-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="placeholder:text-gray"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="register-confirm-password">Confirmar contraseña</Label>
-                <Input
-                  id="register-confirm-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
-                />
+                <Label htmlFor="register-confirm-password">
+                  Confirmar contraseña
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="register-confirm-password"
+                    type={showConfirm ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="placeholder:text-gray"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2"
+                  >
+                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-[#9E6034] text-white transition-all duration-150 hover:brightness-95"
+                className="w-full bg-[#9E6034] text-white hover:brightness-95"
                 disabled={isLoading}
-                aria-disabled={isLoading}
               >
                 {isLoading ? "Creando cuenta..." : "Crear Cuenta"}
               </Button>
 
               <div className="text-center mt-3 text-sm">
                 <span>¿Ya tienes cuenta? </span>
-                <Link href="/login" className="text-[#9E6034] font-medium underline">
+                <Link
+                  href="/login"
+                  className="text-[#9E6034] font-medium underline"
+                >
                   Inicia sesión
                 </Link>
               </div>
